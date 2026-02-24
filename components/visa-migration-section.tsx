@@ -58,6 +58,7 @@ interface VisaCategory {
     name: string;
     description: string;
     duration?: string;
+    immiUrl: string;
   }[];
 }
 
@@ -290,24 +291,28 @@ export function VisaMigrationSection() {
           name: "Visitor Visa",
           description: "For tourism, visiting family or business purposes",
           duration: "3-12 months",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/visitor-600",
         },
         {
           subclass: "601",
           name: "Electronic Travel Authority (ETA)",
           description: "Electronic visa for eligible passport holders",
           duration: "Up to 3 months per visit",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601",
         },
         {
           subclass: "651",
           name: "eVisitor",
           description: "Free electronic visa for European passport holders",
           duration: "Up to 3 months per visit",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/evisitor-651",
         },
         {
           subclass: "771",
           name: "Transit Visa",
           description: "For transiting through Australia",
           duration: "Up to 72 hours",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/transit-771",
         },
       ],
     },
@@ -320,24 +325,28 @@ export function VisaMigrationSection() {
           name: "Student Visa",
           description: "For full-time study at an Australian educational institution",
           duration: "Duration of course",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500",
         },
         {
           subclass: "590",
           name: "Student Guardian Visa",
           description: "For guardians of students under 18",
           duration: "Duration of student's course",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-guardian-590",
         },
         {
           subclass: "485",
           name: "Temporary Graduate Visa",
           description: "For recent graduates to work in Australia",
           duration: "18 months to 4 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485",
         },
         {
           subclass: "476",
           name: "Skilled Recognised Graduate Visa",
           description: "For recent engineering graduates",
           duration: "Up to 18 months",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-recognised-graduate-476",
         },
       ],
     },
@@ -350,42 +359,49 @@ export function VisaMigrationSection() {
           name: "Skilled Independent Visa",
           description: "Points-based permanent visa without sponsorship",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-independent-189",
         },
         {
           subclass: "190",
           name: "Skilled Nominated Visa",
           description: "Points-based visa with state nomination",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-nominated-190",
         },
         {
           subclass: "491",
           name: "Skilled Work Regional (Provisional) Visa",
           description: "For skilled workers in regional areas",
           duration: "5 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-work-regional-provisional-491",
         },
         {
           subclass: "191",
           name: "Permanent Residence (Skilled Regional) Visa",
           description: "For subclass 491/494 holders after 3 years",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/permanent-residence-skilled-regional-191",
         },
         {
           subclass: "482",
           name: "Temporary Skill Shortage Visa",
           description: "Employer-sponsored temporary work visa",
           duration: "Up to 4 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-skill-shortage-482",
         },
         {
           subclass: "186",
           name: "Employer Nomination Scheme",
           description: "Employer-sponsored permanent residency",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/employer-nomination-scheme-186",
         },
         {
           subclass: "494",
           name: "Skilled Employer Sponsored Regional (Provisional) Visa",
           description: "Employer-sponsored visa for regional areas",
           duration: "5 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-employer-sponsored-regional-494",
         },
       ],
     },
@@ -398,54 +414,63 @@ export function VisaMigrationSection() {
           name: "Prospective Marriage Visa",
           description: "For fiancés of Australian citizens/residents",
           duration: "9-15 months",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/prospective-marriage-300",
         },
         {
           subclass: "309/100",
           name: "Partner Visa (Offshore)",
           description: "Two-stage visa for partners living offshore",
           duration: "Temporary then Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/partner-offshore-309-100",
         },
         {
           subclass: "820/801",
           name: "Partner Visa (Onshore)",
           description: "Two-stage visa for partners in Australia",
           duration: "Temporary then Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/partner-onshore-820-801",
         },
         {
           subclass: "101",
           name: "Child Visa (Offshore)",
           description: "For dependent children outside Australia",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/child-101",
         },
         {
           subclass: "802",
           name: "Child Visa (Onshore)",
           description: "For dependent children in Australia",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/child-802",
         },
         {
           subclass: "103",
           name: "Parent Visa",
           description: "For parents of Australian citizens/residents",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/parent-103",
         },
         {
           subclass: "143",
           name: "Contributory Parent Visa",
           description: "Faster parent visa with higher fees",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/contributory-parent-143",
         },
         {
           subclass: "173",
           name: "Contributory Parent (Temporary) Visa",
           description: "Temporary parent visa pathway",
           duration: "2 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/contributory-parent-temp-173",
         },
         {
           subclass: "116",
           name: "Carer Visa",
           description: "For carers of Australian residents with medical needs",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/carer-116",
         },
       ],
     },
@@ -458,18 +483,21 @@ export function VisaMigrationSection() {
           name: "Business Innovation and Investment (Provisional) Visa",
           description: "Provisional visa for business owners and investors",
           duration: "4-5 years",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/business-innovation-and-investment-188",
         },
         {
           subclass: "888",
           name: "Business Innovation and Investment (Permanent) Visa",
           description: "Permanent visa for subclass 188 holders",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/business-innovation-and-investment-permanent-888",
         },
         {
           subclass: "132",
           name: "Business Talent Visa",
           description: "For high-calibre business people",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/business-talent-permanent-132",
         },
       ],
     },
@@ -482,12 +510,14 @@ export function VisaMigrationSection() {
           name: "Working Holiday Visa",
           description: "For citizens of eligible countries aged 18-30",
           duration: "12 months (extendable)",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/working-holiday-417",
         },
         {
           subclass: "462",
           name: "Work and Holiday Visa",
           description: "For citizens of Work and Holiday agreement countries",
           duration: "12 months (extendable)",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-and-holiday-462",
         },
       ],
     },
@@ -500,18 +530,21 @@ export function VisaMigrationSection() {
           name: "Temporary Work (Short Stay Specialist) Visa",
           description: "For short-term highly specialized work",
           duration: "Up to 6 months",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-work-short-stay-specialist-400",
         },
         {
           subclass: "408",
           name: "Temporary Activity Visa",
           description: "For specific temporary activities",
           duration: "Varies by activity",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-activity-408",
         },
         {
           subclass: "444",
           name: "Special Category Visa (SCV)",
           description: "Automatic visa for New Zealand citizens",
           duration: "Indefinite while NZ citizen",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/special-category-444",
         },
       ],
     },
@@ -524,18 +557,21 @@ export function VisaMigrationSection() {
           name: "Refugee Visa",
           description: "For refugees outside Australia",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/refugee-200",
         },
         {
           subclass: "202",
           name: "Global Special Humanitarian Visa",
           description: "For those in humanitarian need outside Australia",
           duration: "Permanent",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/global-special-humanitarian-202",
         },
         {
           subclass: "866",
           name: "Protection Visa",
           description: "For people seeking protection in Australia",
           duration: "Permanent or temporary",
+          immiUrl: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/protection-866",
         },
       ],
     },
@@ -929,11 +965,17 @@ export function VisaMigrationSection() {
                                           {visa.description}
                                         </p>
                                       </div>
-                                      <Link href="/book-consultation">
-                                        <Button size="sm" variant="outline" className="flex-shrink-0 text-xs">
+                                      <a
+                                        href={visa.immiUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-shrink-0"
+                                      >
+                                        <Button size="sm" variant="outline" className="text-xs">
                                           Info
+                                          <ExternalLink className="ml-1 h-3 w-3" />
                                         </Button>
-                                      </Link>
+                                      </a>
                                     </div>
                                   </div>
                                 ))}
