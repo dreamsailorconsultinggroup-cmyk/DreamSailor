@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import {
   Plus,
@@ -23,6 +25,9 @@ import {
   ToggleLeft,
   ToggleRight,
   X,
+  Save,
+  Upload,
+  FileText,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -44,6 +49,289 @@ interface SuccessfulApplicant {
   createdAt: string;
 }
 
+// ─── Edit Modal ───────────────────────────────────────────────────────────────
+function EditModal({
+  applicant,
+  onClose,
+  onSaved,
+}: {
+  applicant: SuccessfulApplicant;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: applicant.fullName,
+    description: applicant.description,
+    jobTitle: applicant.jobTitle ?? "",
+    placedCompany: applicant.placedCompany ?? "",
+    country: applicant.country ?? "",
+    isActive: applicant.isActive,
+  });
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setProfilePhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
+
+  const handleCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCvFile(file);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const body = new FormData();
+      body.append("FullName", formData.fullName);
+      body.append("Description", formData.description);
+      if (formData.jobTitle) body.append("JobTitle", formData.jobTitle);
+      if (formData.placedCompany) body.append("PlacedCompany", formData.placedCompany);
+      if (formData.country) body.append("Country", formData.country);
+      body.append("IsActive", String(formData.isActive));
+      if (profilePhoto) body.append("ProfilePhoto", profilePhoto);
+      if (cvFile) body.append("CvFile", cvFile);
+
+      const res = await fetch(
+        `${API_BASE}/api/successful-applicants/${applicant.successfulApplicantId}`,
+        { method: "PUT", body }
+      );
+      const data = await res.json();
+
+      if (data.success) {
+        toast({ title: "Success", description: "Applicant updated successfully" });
+        onSaved();
+        onClose();
+      } else {
+        toast({
+          title: "Error",
+          description: data.errorMessage ?? "Update failed",
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({ title: "Error", description: "An unexpected error occurred", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Close on backdrop click
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Modal Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white rounded-t-2xl z-10">
+          <h2 className="text-lg font-bold text-primary">Edit Applicant</h2>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+          {/* Full Name */}
+          <div>
+            <Label htmlFor="edit-fullName">Full Name *</Label>
+            <Input
+              id="edit-fullName"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleInputChange}
+              required
+              className="mt-1"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <Label htmlFor="edit-description">Description *</Label>
+            <Textarea
+              id="edit-description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={3}
+              maxLength={500}
+              required
+              className="mt-1"
+            />
+            <p className="text-xs text-muted-foreground mt-1 text-right">
+              {formData.description.length}/500
+            </p>
+          </div>
+
+          {/* Job Title + Company side by side */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label htmlFor="edit-jobTitle">Job Title</Label>
+              <Input
+                id="edit-jobTitle"
+                name="jobTitle"
+                value={formData.jobTitle}
+                onChange={handleInputChange}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-placedCompany">Company</Label>
+              <Input
+                id="edit-placedCompany"
+                name="placedCompany"
+                value={formData.placedCompany}
+                onChange={handleInputChange}
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          {/* Country */}
+          <div>
+            <Label htmlFor="edit-country">Country</Label>
+            <Input
+              id="edit-country"
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+              className="mt-1"
+            />
+          </div>
+
+          {/* Visibility toggle */}
+          <div className="flex items-center gap-3 py-1">
+            <Label>Visible on public page</Label>
+            <button
+              type="button"
+              onClick={() =>
+                setFormData((prev) => ({ ...prev, isActive: !prev.isActive }))
+              }
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                formData.isActive ? "bg-primary" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                  formData.isActive ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className="text-sm text-muted-foreground">
+              {formData.isActive ? "Visible" : "Hidden"}
+            </span>
+          </div>
+
+          {/* Profile Photo */}
+          <div>
+            <Label>Profile Photo</Label>
+            <div className="flex items-center gap-4 mt-1">
+              <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/20 bg-primary/5 flex items-center justify-center flex-shrink-0">
+                {photoPreview ? (
+                  <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
+                ) : applicant.hasProfilePhoto && applicant.profilePhotoUrl ? (
+                  <img
+                    src={`${API_BASE}${applicant.profilePhotoUrl}`}
+                    alt="Current"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-6 w-6 text-primary/30" />
+                )}
+              </div>
+              <label className="cursor-pointer">
+                <div className="flex items-center gap-2 px-3 py-2 border rounded-md text-sm hover:bg-muted transition-colors">
+                  <Upload className="h-4 w-4" />
+                  {profilePhoto ? profilePhoto.name : "Replace photo"}
+                </div>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handlePhotoChange}
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* CV */}
+          <div>
+            <Label>CV / Resume</Label>
+            {applicant.hasCV && applicant.cvFileName && !cvFile && (
+              <p className="text-xs text-muted-foreground mt-0.5 mb-1">
+                Current:{" "}
+                <span className="font-medium">{applicant.cvFileName}</span>
+              </p>
+            )}
+            <label className="cursor-pointer block mt-1">
+              <div className="flex items-center gap-2 px-3 py-2 border rounded-md text-sm hover:bg-muted transition-colors w-fit">
+                <FileText className="h-4 w-4" />
+                {cvFile ? cvFile.name : "Replace CV"}
+              </div>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+                onChange={handleCvChange}
+              />
+            </label>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="flex-1" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function AdminSuccessfulApplicantsPage() {
   const [applicants, setApplicants] = useState<SuccessfulApplicant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,11 +342,11 @@ export default function AdminSuccessfulApplicantsPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [editingApplicant, setEditingApplicant] = useState<SuccessfulApplicant | null>(null);
   const pageSize = 10;
 
   const { toast } = useToast();
 
-  // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -97,14 +385,10 @@ export default function AdminSuccessfulApplicantsPage() {
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) return;
-
     try {
       setDeletingId(id);
-      const res = await fetch(`${API_BASE}/api/successful-applicants/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`${API_BASE}/api/successful-applicants/${id}`, { method: "DELETE" });
       const data = await res.json();
-
       if (data.success) {
         toast({ title: "Deleted", description: `${name} has been removed.` });
         fetchApplicants();
@@ -123,13 +407,11 @@ export default function AdminSuccessfulApplicantsPage() {
       setTogglingId(applicant.successfulApplicantId);
       const body = new FormData();
       body.append("IsActive", String(!applicant.isActive));
-
       const res = await fetch(
         `${API_BASE}/api/successful-applicants/${applicant.successfulApplicantId}`,
         { method: "PUT", body }
       );
       const data = await res.json();
-
       if (data.success) {
         toast({
           title: "Updated",
@@ -148,6 +430,15 @@ export default function AdminSuccessfulApplicantsPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Edit Modal */}
+      {editingApplicant && (
+        <EditModal
+          applicant={editingApplicant}
+          onClose={() => setEditingApplicant(null)}
+          onSaved={fetchApplicants}
+        />
+      )}
+
       <main className="py-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -205,9 +496,7 @@ export default function AdminSuccessfulApplicantsPage() {
                 <div className="text-center py-16 text-muted-foreground">
                   <Trophy className="h-10 w-10 mx-auto mb-3 opacity-30" />
                   <p className="font-medium">No applicants found</p>
-                  {searchQuery && (
-                    <p className="text-sm mt-1">Try clearing your search</p>
-                  )}
+                  {searchQuery && <p className="text-sm mt-1">Try clearing your search</p>}
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -225,10 +514,8 @@ export default function AdminSuccessfulApplicantsPage() {
                     </thead>
                     <tbody className="divide-y">
                       {applicants.map((applicant) => (
-                        <tr
-                          key={applicant.successfulApplicantId}
-                          className="hover:bg-muted/20 transition-colors"
-                        >
+                        <tr key={applicant.successfulApplicantId} className="hover:bg-muted/20 transition-colors">
+
                           {/* Applicant */}
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
@@ -244,12 +531,8 @@ export default function AdminSuccessfulApplicantsPage() {
                                 )}
                               </div>
                               <div>
-                                <p className="font-medium text-foreground leading-tight">
-                                  {applicant.fullName}
-                                </p>
-                                <p className="text-xs text-muted-foreground line-clamp-1 max-w-[160px]">
-                                  {applicant.description}
-                                </p>
+                                <p className="font-medium text-foreground leading-tight">{applicant.fullName}</p>
+                                <p className="text-xs text-muted-foreground line-clamp-1 max-w-[160px]">{applicant.description}</p>
                               </div>
                             </div>
                           </td>
@@ -309,8 +592,11 @@ export default function AdminSuccessfulApplicantsPage() {
                           {/* Status */}
                           <td className="px-4 py-4">
                             <Badge
-                              variant={applicant.isActive ? "default" : "secondary"}
-                              className={`text-xs ${applicant.isActive ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-500"}`}
+                              className={`text-xs ${
+                                applicant.isActive
+                                  ? "bg-green-100 text-green-700 hover:bg-green-100"
+                                  : "bg-gray-100 text-gray-500"
+                              }`}
                             >
                               {applicant.isActive ? "Visible" : "Hidden"}
                             </Badge>
@@ -342,17 +628,16 @@ export default function AdminSuccessfulApplicantsPage() {
                                 )}
                               </Button>
 
-                              {/* Edit */}
-                              <Link href={`/admin/successful-applicants/edit/${applicant.successfulApplicantId}`}>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
-                                  title="Edit"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                              </Link>
+                              {/* Edit — opens modal */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
+                                title="Edit"
+                                onClick={() => setEditingApplicant(applicant)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
 
                               {/* Delete */}
                               <Button
