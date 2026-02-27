@@ -56,7 +56,6 @@ export default function SuccessfulApplicantsSection() {
         `${API_BASE}/api/successful-applicants?PageNumber=${currentPage}&PageSize=${pageSize}&IsActive=true`
       );
       const data = await res.json();
-
       if (data.success && data.data) {
         setApplicants(data.data.items || []);
         setTotalPages(data.data.totalPages || 1);
@@ -76,102 +75,90 @@ export default function SuccessfulApplicantsSection() {
     <div ref={ref} className="mb-20">
       {/* Section Header */}
       <div
-        className={`text-center mb-12 transition-all duration-700 ${
+        className={`text-center mb-10 transition-all duration-700 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         }`}
       >
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Trophy className="h-8 w-8 text-accent" />
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <Trophy className="h-7 w-7 text-accent" />
           <h2 className="text-3xl sm:text-4xl font-bold text-primary">
             Our Successful Talents
           </h2>
         </div>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Meet the professionals we've placed in top organisations around the
-          world.
+        <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+          Meet the professionals we've placed in top organisations around the world.
         </p>
         {totalCount > 0 && (
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-1">
             {totalCount} talented professionals placed
           </p>
         )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading */}
       {isLoading ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-7 w-7 animate-spin text-primary" />
         </div>
       ) : (
         <>
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {applicants.map((applicant, index) => (
               <Card
                 key={applicant.successfulApplicantId}
-                className={`group bg-white border border-primary/10 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
+                className={`group bg-white border border-primary/10 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
                 style={{
-                  transitionDelay: isVisible ? `${index * 80}ms` : "0ms",
+                  transitionDelay: isVisible ? `${index * 60}ms` : "0ms",
                 }}
               >
-                {/* Photo Banner */}
-                <div className="relative h-48 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center overflow-hidden">
-                  {applicant.hasProfilePhoto && applicant.profilePhotoUrl ? (
-                    <img
-                      src={`${API_BASE}${applicant.profilePhotoUrl}`}
-                      alt={applicant.fullName}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-md">
-                      <User className="h-10 w-10 text-primary/40" />
-                    </div>
-                  )}
-                  {/* Gradient overlay at bottom */}
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/80 to-transparent" />
-                </div>
-
-                <CardContent className="pt-4 pb-5 px-5">
-                  {/* Name */}
-                  <h3 className="font-bold text-lg text-primary leading-tight mb-1">
-                    {applicant.fullName}
-                  </h3>
-
-                  {/* Job title + company badges */}
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {applicant.jobTitle && (
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-primary/10 text-primary flex items-center gap-1"
-                      >
-                        <Briefcase className="h-3 w-3" />
-                        {applicant.jobTitle}
-                      </Badge>
-                    )}
-                    {applicant.placedCompany && (
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-accent/10 text-accent flex items-center gap-1"
-                      >
-                        <Building2 className="h-3 w-3" />
-                        {applicant.placedCompany}
-                      </Badge>
-                    )}
-                    {applicant.country && (
-                      <Badge
-                        variant="outline"
-                        className="text-xs flex items-center gap-1"
-                      >
-                        <MapPin className="h-3 w-3" />
-                        {applicant.country}
-                      </Badge>
+                <CardContent className="p-4 flex flex-col items-center text-center">
+                  {/* Circular Photo */}
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/20 shadow-sm mb-3 flex-shrink-0 bg-primary/5 flex items-center justify-center">
+                    {applicant.hasProfilePhoto && applicant.profilePhotoUrl ? (
+                      <img
+                        src={`${API_BASE}${applicant.profilePhotoUrl}`}
+                        alt={applicant.fullName}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <User className="h-8 w-8 text-primary/30" />
                     )}
                   </div>
 
+                  {/* Name */}
+                  <h3 className="font-semibold text-sm text-primary leading-tight mb-1 line-clamp-2">
+                    {applicant.fullName}
+                  </h3>
+
+                  {/* Job Title */}
+                  {applicant.jobTitle && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mb-1">
+                      <Briefcase className="h-3 w-3 flex-shrink-0" />
+                      <span className="line-clamp-1">{applicant.jobTitle}</span>
+                    </p>
+                  )}
+
+                  {/* Company */}
+                  {applicant.placedCompany && (
+                    <p className="text-xs text-accent font-medium flex items-center gap-1 mb-1">
+                      <Building2 className="h-3 w-3 flex-shrink-0" />
+                      <span className="line-clamp-1">{applicant.placedCompany}</span>
+                    </p>
+                  )}
+
+                  {/* Country */}
+                  {applicant.country && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mb-3">
+                      <MapPin className="h-3 w-3 flex-shrink-0" />
+                      <span className="line-clamp-1">{applicant.country}</span>
+                    </p>
+                  )}
+
                   {/* Description */}
-                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3 w-full text-left">
                     {applicant.description}
                   </p>
 
@@ -180,14 +167,15 @@ export default function SuccessfulApplicantsSection() {
                     <a
                       href={`${API_BASE}${applicant.cvDownloadUrl}`}
                       download={applicant.cvFileName ?? "cv.pdf"}
+                      className="w-full mt-auto"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Button
                         variant="outline"
                         size="sm"
-                        className="w-full border-primary/30 text-primary hover:bg-primary hover:text-white transition-all"
+                        className="w-full text-xs border-primary/30 text-primary hover:bg-primary hover:text-white transition-all h-7 px-2"
                       >
-                        <Download className="h-4 w-4 mr-2" />
+                        <Download className="h-3 w-3 mr-1" />
                         Download CV
                       </Button>
                     </a>
@@ -199,7 +187,7 @@ export default function SuccessfulApplicantsSection() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-3 mt-10">
+            <div className="flex justify-center items-center gap-3 mt-8">
               <Button
                 variant="outline"
                 size="sm"
