@@ -163,7 +163,7 @@ export default function SuccessfulApplicantsSection() {
                   </p>
 
                   {/* CV Download */}
-                  {applicant.hasCV && applicant.cvDownloadUrl && (
+                  {applicant.cvDownloadUrl && (
                     <a
                       href={`${API_BASE}${applicant.cvDownloadUrl}`}
                       download={applicant.cvFileName ?? "cv.pdf"}
