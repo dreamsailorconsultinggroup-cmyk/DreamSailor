@@ -200,9 +200,9 @@ const universities: UniversitiesMap = {
 const recruitmentConsultants: Consultant[] = [
   {
     name: "Ms. Saglina Shrestha",
-    role: "Founder/ Managing Director",
+    role: "QAEC Certified Counsellor | Founder",
     description:
-      "Expert in matching candidates with executive positions, she has successfully placed over 500 professionals in multinational corporations worldwide.",
+      "As the Founder of Dream Sailor and a QAEC-certified counsellor, Saglina leads with expertise and integrity, helping students secure the right international education opportunities through strategic guidance and personalised support.",
     photo: "/Salina_Shrestha.png",
     certificates: [
       "Executive Search Certification",

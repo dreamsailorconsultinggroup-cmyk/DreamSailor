@@ -386,6 +386,314 @@ export function RecruitmentSection() {
             </div>
           </div>
 
+          {/* Applicant Success Stories */}
+          {applicants.length > 0 && (
+            <ApplicantSection
+              blogs={applicants}
+              title="View our talents"
+              subtitle="Discover our best talents."
+              linkPrefix="recruitment/blogs"
+            />
+          )}
+
+          {/* Current Opportunities Section */}
+          <div id="current-opportunities" className="mb-16">
+            <h3 className="text-3xl font-bold text-center mb-4 text-primary flex items-center justify-center">
+              <Briefcase className="h-7 w-7 mr-2 text-accent" />
+              Current Job Opportunities
+            </h3>
+            <p className="text-center text-muted-foreground mb-8 max-w-3xl mx-auto">
+              Browse through our curated job openings across various industries
+              and locations. All positions are pre-screened to ensure quality
+              opportunities for talented professionals.
+            </p>
+
+            {/* Search Bar */}
+            <div className="mb-6">
+              <div className="relative max-w-3xl mx-auto">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder="Search by job title, company, or keyword..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-4 py-6 text-lg bg-white border-2 border-primary/20 focus:border-primary shadow-md"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-primary"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Filter Toggle */}
+            <div className="lg:hidden mb-4">
+              <Button
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                variant="outline"
+                className="w-full"
+              >
+                <Filter className="h-4 w-4 mr-2" />
+                Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
+              </Button>
+            </div>
+
+            {/* Filters and Jobs Layout */}
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Filters Sidebar */}
+              <aside
+                className={`lg:w-80 space-y-6 ${showMobileFilters ? "block" : "hidden lg:block"
+                  }`}
+              >
+                <Card className="bg-gray-50 border-primary/10 sticky top-4">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span className="flex items-center">
+                        <Filter className="h-5 w-5 mr-2" />
+                        Filters
+                      </span>
+                      {activeFiltersCount > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearAllFilters}
+                          className="text-xs"
+                        >
+                          Clear All
+                        </Button>
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Location Filter */}
+                    <div>
+                      <label className="text-sm font-semibold text-primary mb-2 flex items-center">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        Location
+                      </label>
+                      <Select
+                        value={selectedLocation}
+                        onValueChange={setSelectedLocation}
+                      >
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder="Select location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Locations</SelectItem>
+                          {allLocations.map((location) => (
+                            <SelectItem key={location} value={location}>
+                              {location}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Active Filters */}
+                    {activeFiltersCount > 0 && (
+                      <div className="pt-4 border-t">
+                        <p className="text-sm font-semibold text-primary mb-2">
+                          Active Filters:
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {searchQuery && (
+                            <Badge
+                              variant="secondary"
+                              className="cursor-pointer"
+                              onClick={() => setSearchQuery("")}
+                            >
+                              Search: {searchQuery}
+                              <X className="h-3 w-3 ml-1" />
+                            </Badge>
+                          )}
+                          {selectedLocation !== "all" && (
+                            <Badge
+                              variant="secondary"
+                              className="cursor-pointer"
+                              onClick={() => setSelectedLocation("all")}
+                            >
+                              {selectedLocation}
+                              <X className="h-3 w-3 ml-1" />
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </aside>
+
+              {/* Jobs Grid */}
+              <div className="flex-1">
+                {(() => {
+                  const { ref, isVisible } = useInView<HTMLDivElement>();
+                  return (
+                    <div
+                      ref={ref}
+                      className={`${isVisible ? "animate-fade-in-up" : "opacity-0"
+                        }`}
+                    >
+                      {/* Results Count */}
+                      <div className="mb-4 flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">
+                          Showing <strong>{jobs.length}</strong> of{" "}
+                          <strong>{totalCount}</strong>{" "}
+                          {totalCount === 1 ? "job" : "jobs"}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        {jobs.map((job, index) => (
+                          <Link
+                            key={job.PostId}
+                            href={{
+                              pathname: `/recruitment/profile/${job.PostId}`,
+                              query: { job: JSON.stringify(job) },
+                            }}
+                            className="w-full"
+                          >
+                            <Card
+                              className={`bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 h-full ${isVisible ? "animate-slide-up" : "opacity-0"
+                                }`}
+                              style={{ animationDelay: `${index * 50}ms` }}
+                            >
+                              <CardHeader>
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <CardTitle className="text-lg mb-1">
+                                      {job.JobTitle}
+                                    </CardTitle>
+                                    <CardDescription className="font-medium text-foreground">
+                                      {job.CompanyTitle}
+                                    </CardDescription>
+                                  </div>
+                                  {job.urgent && (
+                                    <Badge
+                                      variant="destructive"
+                                      className="text-xs"
+                                    >
+                                      Urgent
+                                    </Badge>
+                                  )}
+                                </div>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="space-y-3">
+                                  <div className="flex items-center text-sm text-muted-foreground">
+                                    <MapPin className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
+                                    {job.JobLocation}
+                                  </div>
+                                  <div className="flex items-center text-sm text-muted-foreground">
+                                    <DollarSign className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
+                                    {job.Salary}
+                                  </div>
+                                  <div className="flex items-center justify-between text-sm">
+                                    <div className="flex items-center text-muted-foreground">
+                                      <Users className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
+                                      {job.JobType}
+                                    </div>
+                                    <div className="flex items-center text-muted-foreground">
+                                      <Clock className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
+                                      {job.CreatedAt}
+                                    </div>
+                                  </div>
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs bg-primary/10 text-primary"
+                                  >
+                                    {job.category}
+                                  </Badge>
+                                </div>
+                                <div className="flex gap-4 mt-4">
+                                  <Button
+                                    asChild
+                                    className="flex-1 bg-primary hover:bg-blue-900 text-white transition-all"
+                                  >
+                                    <Link
+                                      href={`/recruitment/apply?jobId=${job.PostId
+                                        }&jobUrl=${encodeURIComponent(
+                                          job.url || "",
+                                        )}`}
+                                    >
+                                      Apply Now
+                                    </Link>
+                                  </Button>
+                                  <Button
+                                    asChild
+                                    variant="outline"
+                                    className="flex-1 bg-primary/10 text-primary hover:bg-accent hover:text-white transition-all"
+                                  >
+                                    <Link
+                                      href={{
+                                        pathname: `/recruitment/profile/${job.PostId}`,
+                                        query: { job: JSON.stringify(job) },
+                                      }}
+                                    >
+                                      View Details
+                                    </Link>
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </Link>
+                        ))}
+                      </div>
+
+                      {isLoading ? (
+                        <div className="flex justify-center py-12">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                      ) : jobs.length === 0 ? (
+                        <div className="text-center py-12">
+                          <p className="text-lg text-muted-foreground mb-4">
+                            No jobs found matching your criteria.
+                          </p>
+                          {activeFiltersCount > 0 && (
+                            <Button onClick={clearAllFilters} variant="outline">
+                              Clear All Filters
+                            </Button>
+                          )}
+                        </div>
+                      ) : null}
+
+                      {/* Pagination */}
+                      {!isLoading && jobs.length > 0 && totalPages > 1 && (
+                        <div className="flex justify-center mt-8 gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setCurrentPage((p) => Math.max(1, p - 1))
+                            }
+                            disabled={currentPage === 1 || isLoading}
+                          >
+                            Previous
+                          </Button>
+                          <span className="flex items-center px-4">
+                            Page {currentPage} of {totalPages}
+                          </span>
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setCurrentPage((p) =>
+                                p < totalPages ? p + 1 : p,
+                              )
+                            }
+                            disabled={currentPage >= totalPages || isLoading}
+                          >
+                            Next
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+
           {/* Our Expertise Section */}
           <section className="py-16 mb-16 bg-white rounded-2xl shadow-lg">
             {(() => {
@@ -393,9 +701,8 @@ export function RecruitmentSection() {
               return (
                 <div
                   ref={ref}
-                  className={`px-4 sm:px-6 lg:px-8 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`px-4 sm:px-6 lg:px-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="text-center mb-12">
                     <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">
@@ -537,9 +844,8 @@ export function RecruitmentSection() {
               return (
                 <div
                   ref={ref}
-                  className={`px-4 sm:px-6 lg:px-8 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`px-4 sm:px-6 lg:px-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="text-center mb-12">
                     <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">
@@ -631,307 +937,7 @@ export function RecruitmentSection() {
             })()}
           </section>
 
-          {/* Current Opportunities Section */}
-          <div id="current-opportunities" className="mb-16">
-            <h3 className="text-3xl font-bold text-center mb-4 text-primary flex items-center justify-center">
-              <Briefcase className="h-7 w-7 mr-2 text-accent" />
-              Current Job Opportunities
-            </h3>
-            <p className="text-center text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Browse through our curated job openings across various industries
-              and locations. All positions are pre-screened to ensure quality
-              opportunities for talented professionals.
-            </p>
 
-            {/* Search Bar */}
-            <div className="mb-6">
-              <div className="relative max-w-3xl mx-auto">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                <Input
-                  placeholder="Search by job title, company, or keyword..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 pr-4 py-6 text-lg bg-white border-2 border-primary/20 focus:border-primary shadow-md"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-primary"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Mobile Filter Toggle */}
-            <div className="lg:hidden mb-4">
-              <Button
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                variant="outline"
-                className="w-full"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
-              </Button>
-            </div>
-
-            {/* Filters and Jobs Layout */}
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Filters Sidebar */}
-              <aside
-                className={`lg:w-80 space-y-6 ${
-                  showMobileFilters ? "block" : "hidden lg:block"
-                }`}
-              >
-                <Card className="bg-gray-50 border-primary/10 sticky top-4">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span className="flex items-center">
-                        <Filter className="h-5 w-5 mr-2" />
-                        Filters
-                      </span>
-                      {activeFiltersCount > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={clearAllFilters}
-                          className="text-xs"
-                        >
-                          Clear All
-                        </Button>
-                      )}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Location Filter */}
-                    <div>
-                      <label className="text-sm font-semibold text-primary mb-2 flex items-center">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Location
-                      </label>
-                      <Select
-                        value={selectedLocation}
-                        onValueChange={setSelectedLocation}
-                      >
-                        <SelectTrigger className="w-full bg-white">
-                          <SelectValue placeholder="Select location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Locations</SelectItem>
-                          {allLocations.map((location) => (
-                            <SelectItem key={location} value={location}>
-                              {location}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Active Filters */}
-                    {activeFiltersCount > 0 && (
-                      <div className="pt-4 border-t">
-                        <p className="text-sm font-semibold text-primary mb-2">
-                          Active Filters:
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {searchQuery && (
-                            <Badge
-                              variant="secondary"
-                              className="cursor-pointer"
-                              onClick={() => setSearchQuery("")}
-                            >
-                              Search: {searchQuery}
-                              <X className="h-3 w-3 ml-1" />
-                            </Badge>
-                          )}
-                          {selectedLocation !== "all" && (
-                            <Badge
-                              variant="secondary"
-                              className="cursor-pointer"
-                              onClick={() => setSelectedLocation("all")}
-                            >
-                              {selectedLocation}
-                              <X className="h-3 w-3 ml-1" />
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </aside>
-
-              {/* Jobs Grid */}
-              <div className="flex-1">
-                {(() => {
-                  const { ref, isVisible } = useInView<HTMLDivElement>();
-                  return (
-                    <div
-                      ref={ref}
-                      className={`${
-                        isVisible ? "animate-fade-in-up" : "opacity-0"
-                      }`}
-                    >
-                      {/* Results Count */}
-                      <div className="mb-4 flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">
-                          Showing <strong>{jobs.length}</strong> of{" "}
-                          <strong>{totalCount}</strong>{" "}
-                          {totalCount === 1 ? "job" : "jobs"}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                        {jobs.map((job, index) => (
-                          <Link
-                            key={job.PostId}
-                            href={{
-                              pathname: `/recruitment/profile/${job.PostId}`,
-                              query: { job: JSON.stringify(job) },
-                            }}
-                            className="w-full"
-                          >
-                            <Card
-                              className={`bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 h-full ${
-                                isVisible ? "animate-slide-up" : "opacity-0"
-                              }`}
-                              style={{ animationDelay: `${index * 50}ms` }}
-                            >
-                              <CardHeader>
-                                <div className="flex items-start justify-between">
-                                  <div>
-                                    <CardTitle className="text-lg mb-1">
-                                      {job.JobTitle}
-                                    </CardTitle>
-                                    <CardDescription className="font-medium text-foreground">
-                                      {job.CompanyTitle}
-                                    </CardDescription>
-                                  </div>
-                                  {job.urgent && (
-                                    <Badge
-                                      variant="destructive"
-                                      className="text-xs"
-                                    >
-                                      Urgent
-                                    </Badge>
-                                  )}
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="space-y-3">
-                                  <div className="flex items-center text-sm text-muted-foreground">
-                                    <MapPin className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                                    {job.JobLocation}
-                                  </div>
-                                  <div className="flex items-center text-sm text-muted-foreground">
-                                    <DollarSign className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                                    {job.Salary}
-                                  </div>
-                                  <div className="flex items-center justify-between text-sm">
-                                    <div className="flex items-center text-muted-foreground">
-                                      <Users className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                                      {job.JobType}
-                                    </div>
-                                    <div className="flex items-center text-muted-foreground">
-                                      <Clock className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                                      {job.CreatedAt}
-                                    </div>
-                                  </div>
-                                  <Badge
-                                    variant="secondary"
-                                    className="text-xs bg-primary/10 text-primary"
-                                  >
-                                    {job.category}
-                                  </Badge>
-                                </div>
-                                <div className="flex gap-4 mt-4">
-                                  <Button
-                                    asChild
-                                    className="flex-1 bg-primary hover:bg-blue-900 text-white transition-all"
-                                  >
-                                    <Link
-                                      href={`/recruitment/apply?jobId=${
-                                        job.PostId
-                                      }&jobUrl=${encodeURIComponent(
-                                        job.url || "",
-                                      )}`}
-                                    >
-                                      Apply Now
-                                    </Link>
-                                  </Button>
-                                  <Button
-                                    asChild
-                                    variant="outline"
-                                    className="flex-1 bg-primary/10 text-primary hover:bg-accent hover:text-white transition-all"
-                                  >
-                                    <Link
-                                      href={{
-                                        pathname: `/recruitment/profile/${job.PostId}`,
-                                        query: { job: JSON.stringify(job) },
-                                      }}
-                                    >
-                                      View Details
-                                    </Link>
-                                  </Button>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </Link>
-                        ))}
-                      </div>
-
-                      {isLoading ? (
-                        <div className="flex justify-center py-12">
-                          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                        </div>
-                      ) : jobs.length === 0 ? (
-                        <div className="text-center py-12">
-                          <p className="text-lg text-muted-foreground mb-4">
-                            No jobs found matching your criteria.
-                          </p>
-                          {activeFiltersCount > 0 && (
-                            <Button onClick={clearAllFilters} variant="outline">
-                              Clear All Filters
-                            </Button>
-                          )}
-                        </div>
-                      ) : null}
-
-                      {/* Pagination */}
-                      {!isLoading && jobs.length > 0 && totalPages > 1 && (
-                        <div className="flex justify-center mt-8 gap-2">
-                          <Button
-                            variant="outline"
-                            onClick={() =>
-                              setCurrentPage((p) => Math.max(1, p - 1))
-                            }
-                            disabled={currentPage === 1 || isLoading}
-                          >
-                            Previous
-                          </Button>
-                          <span className="flex items-center px-4">
-                            Page {currentPage} of {totalPages}
-                          </span>
-                          <Button
-                            variant="outline"
-                            onClick={() =>
-                              setCurrentPage((p) =>
-                                p < totalPages ? p + 1 : p,
-                              )
-                            }
-                            disabled={currentPage >= totalPages || isLoading}
-                          >
-                            Next
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-          </div>
 
           {/* Consultants Section */}
           <section id="team" className="py-20">
@@ -940,23 +946,20 @@ export function RecruitmentSection() {
               return (
                 <div
                   ref={ref}
-                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="text-center mb-16">
                     <h2
-                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${
-                        isVisible ? "animate-slide-up" : "opacity-0"
-                      }`}
+                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${isVisible ? "animate-slide-up" : "opacity-0"
+                        }`}
                     >
                       <Users className="h-8 w-8 mr-2 text-accent" />
                       Meet Our Expert Consultants
                     </h2>
                     <p
-                      className={`text-xl text-muted-foreground max-w-3xl mx-auto text-pretty ${
-                        isVisible ? "animate-fade-in delay-100" : "opacity-0"
-                      }`}
+                      className={`text-xl text-muted-foreground max-w-3xl mx-auto text-pretty ${isVisible ? "animate-fade-in delay-100" : "opacity-0"
+                        }`}
                     >
                       Our certified recruitment professionals bring decades of
                       combined experience in connecting top talent with leading
@@ -968,9 +971,8 @@ export function RecruitmentSection() {
                     {recruitmentConsultants.map((consultant, index) => (
                       <Card
                         key={consultant.name}
-                        className={`relative w-full max-w-sm bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${
-                          isVisible ? "animate-slide-up" : "opacity-0"
-                        }`}
+                        className={`relative w-full max-w-sm bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"
+                          }`}
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <CardHeader className="pt-8 pb-4">
@@ -979,63 +981,56 @@ export function RecruitmentSection() {
                               <img
                                 src={consultant.photo}
                                 alt={consultant.name}
-                                className={`absolute inset-0 w-full h-full object-contain bg-white ${
-                                  isVisible ? "animate-scale-in" : "opacity-0"
-                                }`}
+                                className={`absolute inset-0 w-full h-full object-contain bg-white ${isVisible ? "animate-scale-in" : "opacity-0"
+                                  }`}
                               />
                             </div>
                           </div>
                         </CardHeader>
                         <CardContent className="text-center">
                           <h3
-                            className={`font-semibold text-lg ${
-                              isVisible ? "animate-fade-in" : "opacity-0"
-                            }`}
+                            className={`font-semibold text-lg ${isVisible ? "animate-fade-in" : "opacity-0"
+                              }`}
                           >
                             {consultant.name}
                           </h3>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${
-                              isVisible
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible
                                 ? "animate-fade-in delay-100"
                                 : "opacity-0"
-                            }`}
+                              }`}
                           >
                             {consultant.role}
                           </p>
                           <p
-                            className={`text-sm text-pretty mb-2 ${
-                              isVisible
+                            className={`text-sm text-pretty mb-2 ${isVisible
                                 ? "animate-fade-in delay-200"
                                 : "opacity-0"
-                            }`}
+                              }`}
                           >
                             {consultant.description}
                           </p>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${
-                              isVisible
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible
                                 ? "animate-fade-in delay-300"
                                 : "opacity-0"
-                            }`}
+                              }`}
                           >
                             <strong>Email:</strong> {consultant.email}
                           </p>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${
-                              isVisible
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible
                                 ? "animate-fade-in delay-400"
                                 : "opacity-0"
-                            }`}
+                              }`}
                           >
                             <strong>Contact:</strong> {consultant.contactNumber}
                           </p>
                           <div
-                            className={`flex flex-wrap gap-2 mt-2 justify-center ${
-                              isVisible
+                            className={`flex flex-wrap gap-2 mt-2 justify-center ${isVisible
                                 ? "animate-fade-in delay-500"
                                 : "opacity-0"
-                            }`}
+                              }`}
                           >
                             {consultant.certificates.map((cert) => (
                               <Badge
@@ -1062,16 +1057,6 @@ export function RecruitmentSection() {
               blogs={blogs}
               title="Recruitment & Placement Insights"
               subtitle="Stay informed with the latest trends, tips, and insights in the recruitment industry."
-              linkPrefix="recruitment/blogs"
-            />
-          )}
-
-          {/* Applicant Success Stories */}
-          {applicants.length > 0 && (
-            <ApplicantSection
-              blogs={applicants}
-              title="Remarkable Success Stories"
-              subtitle="Discover how we've helped talented professionals achieve their career dreams and helped businesses find their perfect match."
               linkPrefix="recruitment/blogs"
             />
           )}

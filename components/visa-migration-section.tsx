@@ -625,7 +625,7 @@ export function VisaMigrationSection() {
                 size="lg"
                 className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-lg px-8 py-3 animate-pulse-slow"
               >
-                Free Assessment
+                Book a Consultation
                 <Globe className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -664,87 +664,7 @@ export function VisaMigrationSection() {
             </p>
           </div>
 
-          {/* Visa Fees and Pricing Information Section */}
-          <div className="mb-16">
-            <h3 className="text-3xl font-bold text-center mb-8 text-primary flex items-center justify-center">
-              <CreditCard className="h-6 w-6 mr-2 text-accent" />
-              Visa Fees & Charges
-            </h3>
-            {(() => {
-              const { ref, isVisible } = useInView<HTMLDivElement>();
-              return (
-                <div
-                  ref={ref}
-                  className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
-                >
-                  <Card className="border-2 border-primary/20 shadow-lg mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-2xl text-primary flex items-center">
-                        <Info className="h-6 w-6 mr-2" />
-                        Understanding Visa Application Charges
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        Official information from the Australian Department of Home Affairs
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-muted-foreground">
-                        The cost of visas changes from time to time. The cost of your visa is dependent on the date we receive your application. If there is a price increase between the date you lodge your application and the date we receive your application, you will need to pay the new application charge.
-                      </p>
-                      <div className="bg-accent/10 p-4 rounded-lg">
-                        <p className="font-semibold text-primary mb-2">Important Note:</p>
-                        <p className="text-sm text-muted-foreground">
-                          The visa application charge is the amount of money in Australian dollars (AUD) that must be paid for a visa application. In some cases the visa application charge is nil. A surcharge may apply when paying by credit card or PayPal.
-                        </p>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                        <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-lg">
-                          <DollarSign className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h4 className="font-semibold text-primary mb-1">Visa Pricing Categories</h4>
-                            <p className="text-sm text-muted-foreground">
-                              Visit, Study, Work, Live, Other, and Repealed/Closed visas
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-lg">
-                          <Calculator className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h4 className="font-semibold text-primary mb-1">Pricing Estimator</h4>
-                            <p className="text-sm text-muted-foreground">
-                              Use the official estimator to calculate your visa costs
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-3 pt-4">
-                        <a
-                          href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/fees-and-charges/current-visa-pricing"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Button className="bg-primary hover:bg-primary/90 text-white">
-                            View Current Pricing Table
-                            <ExternalLink className="ml-2 h-4 w-4" />
-                          </Button>
-                        </a>
-                        <a
-                          href="https://immi.homeaffairs.gov.au/visas/visa-pricing-estimator"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
-                            Use Pricing Estimator
-                            <Calculator className="ml-2 h-4 w-4" />
-                          </Button>
-                        </a>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              );
-            })()}
-          </div>
+
 
           {/* Visa Finder Section with Slider */}
           <div className="mb-16">
@@ -760,9 +680,8 @@ export function VisaMigrationSection() {
               return (
                 <div
                   ref={ref}
-                  className={`relative max-w-6xl mx-auto ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`relative max-w-6xl mx-auto ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="overflow-hidden">
                     <div
@@ -838,11 +757,10 @@ export function VisaMigrationSection() {
                       <button
                         key={index}
                         onClick={() => goToVisaFinderSlide(index)}
-                        className={`h-3 rounded-full transition-all ${
-                          visaFinderSlide === index
-                            ? "w-8 bg-primary"
-                            : "w-3 bg-primary/30 hover:bg-primary/50"
-                        }`}
+                        className={`h-3 rounded-full transition-all ${visaFinderSlide === index
+                          ? "w-8 bg-primary"
+                          : "w-3 bg-primary/30 hover:bg-primary/50"
+                          }`}
                         aria-label={`Go to ${visaFinderCategories[index].title}`}
                       />
                     ))}
@@ -872,9 +790,8 @@ export function VisaMigrationSection() {
                     {visaCategories.map((category, index) => (
                       <Card
                         key={category.category}
-                        className={`border-2 border-primary/10 shadow-md hover:shadow-lg transition-all ${
-                          isVisible ? "animate-slide-up" : "opacity-0"
-                        }`}
+                        className={`border-2 border-primary/10 shadow-md hover:shadow-lg transition-all ${isVisible ? "animate-slide-up" : "opacity-0"
+                          }`}
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <Collapsible
@@ -893,11 +810,10 @@ export function VisaMigrationSection() {
                                   </CardDescription>
                                 </div>
                                 <ChevronDown
-                                  className={`h-5 w-5 text-primary transition-transform duration-200 flex-shrink-0 ml-2 ${
-                                    openCategories.includes(category.category)
-                                      ? "rotate-180"
-                                      : ""
-                                  }`}
+                                  className={`h-5 w-5 text-primary transition-transform duration-200 flex-shrink-0 ml-2 ${openCategories.includes(category.category)
+                                    ? "rotate-180"
+                                    : ""
+                                    }`}
                                 />
                               </div>
                             </CardHeader>
@@ -975,26 +891,23 @@ export function VisaMigrationSection() {
               return (
                 <div
                   ref={ref}
-                  className={`relative ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`relative ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-primary/20"></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {steps.map((step, index) => (
                       <div
                         key={step.step}
-                        className={`group relative flex items-center ${
-                          index % 2 === 0
-                            ? "md:justify-end"
-                            : "md:justify-start"
-                        } mb-8 md:mb-12`}
+                        className={`group relative flex items-center ${index % 2 === 0
+                          ? "md:justify-end"
+                          : "md:justify-start"
+                          } mb-8 md:mb-12`}
                       >
                         <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full"></div>
                         <Card
-                          className={`w-full md:w-5/12 bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 ${
-                            isVisible ? "animate-slide-up" : "opacity-0"
-                          }`}
+                          className={`w-full md:w-5/12 bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"
+                            }`}
                           style={{ animationDelay: `${index * 150}ms` }}
                         >
                           <CardContent className="p-6 flex items-center gap-4">
@@ -1030,16 +943,14 @@ export function VisaMigrationSection() {
               return (
                 <div
                   ref={ref}
-                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   {visaTypes.map((visa, index) => (
                     <Card
                       key={index}
-                      className={`bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${
-                        isVisible ? "animate-slide-up" : "opacity-0"
-                      }`}
+                      className={`bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"
+                        }`}
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <CardHeader>
@@ -1103,23 +1014,20 @@ export function VisaMigrationSection() {
               return (
                 <div
                   ref={ref}
-                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="text-center mb-16">
                     <h2
-                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${
-                        isVisible ? "animate-slide-up" : "opacity-0"
-                      }`}
+                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${isVisible ? "animate-slide-up" : "opacity-0"
+                        }`}
                     >
                       <Star className="h-8 w-8 mr-2 text-accent" />
                       Australian Skilled Migration Program
                     </h2>
                     <p
-                      className={`text-xl text-muted-foreground max-w-3xl mx-auto text-pretty ${
-                        isVisible ? "animate-fade-in delay-100" : "opacity-0"
-                      }`}
+                      className={`text-xl text-muted-foreground max-w-3xl mx-auto text-pretty ${isVisible ? "animate-fade-in delay-100" : "opacity-0"
+                        }`}
                     >
                       Unlock your pathway to permanent residency in Australia
                       through our expert skilled migration services with
@@ -1215,11 +1123,10 @@ export function VisaMigrationSection() {
                         <button
                           key={index}
                           onClick={() => goToSlide(index)}
-                          className={`h-3 rounded-full transition-all ${
-                            currentSlide === index
-                              ? "w-8 bg-primary"
-                              : "w-3 bg-primary/30 hover:bg-primary/50"
-                          }`}
+                          className={`h-3 rounded-full transition-all ${currentSlide === index
+                            ? "w-8 bg-primary"
+                            : "w-3 bg-primary/30 hover:bg-primary/50"
+                            }`}
                           aria-label={`Go to slide ${index + 1}`}
                         />
                       ))}
@@ -1349,6 +1256,88 @@ export function VisaMigrationSection() {
             })()}
           </section>
 
+          {/* Visa Fees and Pricing Information Section */}
+          <div className="mb-16 mt-16">
+            <h3 className="text-3xl font-bold text-center mb-8 text-primary flex items-center justify-center">
+              <CreditCard className="h-6 w-6 mr-2 text-accent" />
+              Visa Fees & Charges
+            </h3>
+            {(() => {
+              const { ref, isVisible } = useInView<HTMLDivElement>();
+              return (
+                <div
+                  ref={ref}
+                  className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
+                >
+                  <Card className="border-2 border-primary/20 shadow-lg mb-6">
+                    <CardHeader>
+                      <CardTitle className="text-2xl text-primary flex items-center">
+                        <Info className="h-6 w-6 mr-2" />
+                        Understanding Visa Application Charges
+                      </CardTitle>
+                      <CardDescription className="text-base">
+                        Official information from the Australian Department of Home Affairs
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground">
+                        The cost of visas changes from time to time. The cost of your visa is dependent on the date we receive your application. If there is a price increase between the date you lodge your application and the date we receive your application, you will need to pay the new application charge.
+                      </p>
+                      <div className="bg-accent/10 p-4 rounded-lg">
+                        <p className="font-semibold text-primary mb-2">Important Note:</p>
+                        <p className="text-sm text-muted-foreground">
+                          The visa application charge is the amount of money in Australian dollars (AUD) that must be paid for a visa application. In some cases the visa application charge is nil. A surcharge may apply when paying by credit card or PayPal.
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                        <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-lg">
+                          <DollarSign className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h4 className="font-semibold text-primary mb-1">Visa Pricing Categories</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Visit, Study, Work, Live, Other, and Repealed/Closed visas
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-lg">
+                          <Calculator className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h4 className="font-semibold text-primary mb-1">Pricing Estimator</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Use the official estimator to calculate your visa costs
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-3 pt-4">
+                        <a
+                          href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/fees-and-charges/current-visa-pricing"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button className="bg-primary hover:bg-primary/90 text-white">
+                            View Current Pricing Table
+                            <ExternalLink className="ml-2 h-4 w-4" />
+                          </Button>
+                        </a>
+                        <a
+                          href="https://immi.homeaffairs.gov.au/visas/visa-pricing-estimator"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
+                            Use Pricing Estimator
+                            <Calculator className="ml-2 h-4 w-4" />
+                          </Button>
+                        </a>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })()}
+          </div>
+
           {/* Success Record Section */}
           <div className="mt-16 bg-primary text-white rounded-2xl p-8">
             {(() => {
@@ -1377,9 +1366,8 @@ export function VisaMigrationSection() {
                     ].map((stat, index) => (
                       <div
                         key={index}
-                        className={`${
-                          isVisible ? "animate-slide-up" : "opacity-0"
-                        }`}
+                        className={`${isVisible ? "animate-slide-up" : "opacity-0"
+                          }`}
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <div className="text-4xl font-bold mb-2 animate-pulse">
@@ -1396,6 +1384,8 @@ export function VisaMigrationSection() {
             })()}
           </div>
 
+
+
           {/* Consultant Info Section */}
           <section id="consultant-info" className="py-20">
             {(() => {
@@ -1403,23 +1393,20 @@ export function VisaMigrationSection() {
               return (
                 <div
                   ref={ref}
-                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${
-                    isVisible ? "animate-fade-in-up" : "opacity-0"
-                  }`}
+                  className={`container mx-auto px-4 sm:px-6 lg:px-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"
+                    }`}
                 >
                   <div className="text-center mb-12">
                     <h2
-                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${
-                        isVisible ? "animate-slide-up" : "opacity-0"
-                      }`}
+                      className={`text-3xl sm:text-4xl font-bold text-primary mb-4 flex items-center justify-center ${isVisible ? "animate-slide-up" : "opacity-0"
+                        }`}
                     >
                       <Users className="h-8 w-8 mr-2 text-accent" />
                       Meet Our Expert Consultant
                     </h2>
                     <p
-                      className={`text-lg text-muted-foreground max-w-2xl mx-auto ${
-                        isVisible ? "animate-fade-in delay-100" : "opacity-0"
-                      }`}
+                      className={`text-lg text-muted-foreground max-w-2xl mx-auto ${isVisible ? "animate-fade-in delay-100" : "opacity-0"
+                        }`}
                     >
                       Our MARA registered migration agent is here to guide you
                       through your Australian visa journey
@@ -1428,9 +1415,8 @@ export function VisaMigrationSection() {
 
                   <div className="flex justify-center">
                     <Card
-                      className={`max-w-2xl w-full bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${
-                        isVisible ? "animate-slide-up" : "opacity-0"
-                      }`}
+                      className={`max-w-2xl w-full bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${isVisible ? "animate-slide-up" : "opacity-0"
+                        }`}
                     >
                       <div className="grid md:grid-cols-[200px_1fr] gap-6 p-6">
                         {/* Image Section */}
