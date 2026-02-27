@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Download,
   MapPin,
@@ -14,6 +21,8 @@ import {
   User,
   Trophy,
   Loader2,
+  Search,
+  X,
 } from "lucide-react";
 import { useInView } from "@/hooks/use-in-view";
 
@@ -37,27 +46,75 @@ interface SuccessfulApplicant {
 
 export default function SuccessfulApplicantsSection() {
   const [applicants, setApplicants] = useState<SuccessfulApplicant[]>([]);
+  const [allApplicants, setAllApplicants] = useState<SuccessfulApplicant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedJobTitle, setSelectedJobTitle] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const pageSize = 6;
+  const pageSize = 10;
+
+  // Derived filter options from all loaded data
+  const [countries, setCountries] = useState<string[]>([]);
+  const [jobTitles, setJobTitles] = useState<string[]>([]);
 
   const { ref, isVisible } = useInView<HTMLDivElement>();
 
+  // Fetch all active applicants once to populate filter dropdowns
+  useEffect(() => {
+    fetchAllForFilters();
+  }, []);
+
+  // Re-fetch when page or filters change
   useEffect(() => {
     fetchApplicants();
-  }, [currentPage]);
+  }, [currentPage, searchQuery, selectedCountry, selectedJobTitle]);
+
+  const fetchAllForFilters = async () => {
+    try {
+      const res = await fetch(
+        `${API_BASE}/api/successful-applicants?PageNumber=1&PageSize=200&IsActive=true`
+      );
+      const data = await res.json();
+      if (data.success && data.data?.items) {
+        const items: SuccessfulApplicant[] = data.data.items;
+        setAllApplicants(items);
+        setCountries([...new Set(items.map((a) => a.country).filter(Boolean) as string[])].sort());
+        setJobTitles([...new Set(items.map((a) => a.jobTitle).filter(Boolean) as string[])].sort());
+      }
+    } catch (error) {
+      console.error("Error fetching filter data:", error);
+    }
+  };
 
   const fetchApplicants = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(
-        `${API_BASE}/api/successful-applicants?PageNumber=${currentPage}&PageSize=${pageSize}&IsActive=true`
-      );
+      const params = new URLSearchParams({
+        PageNumber: String(currentPage),
+        PageSize: String(pageSize),
+        IsActive: "true",
+      });
+      if (searchQuery.trim()) params.append("SearchTerm", searchQuery.trim());
+
+      const res = await fetch(`${API_BASE}/api/successful-applicants?${params}`);
       const data = await res.json();
+
       if (data.success && data.data) {
-        setApplicants(data.data.items || []);
+        let items: SuccessfulApplicant[] = data.data.items || [];
+
+        // Client-side filter for country and job title
+        // (backend doesn't have these filter params so we filter locally)
+        if (selectedCountry !== "all") {
+          items = items.filter((a) => a.country === selectedCountry);
+        }
+        if (selectedJobTitle !== "all") {
+          items = items.filter((a) => a.jobTitle === selectedJobTitle);
+        }
+
+        setApplicants(items);
         setTotalPages(data.data.totalPages || 1);
         setTotalCount(data.data.totalCount || 0);
       }
@@ -69,13 +126,31 @@ export default function SuccessfulApplicantsSection() {
     }
   };
 
-  if (!isLoading && applicants.length === 0) return null;
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCountry("all");
+    setSelectedJobTitle("all");
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters =
+    searchQuery !== "" || selectedCountry !== "all" || selectedJobTitle !== "all";
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  if (!isLoading && allApplicants.length === 0) return null;
 
   return (
     <div ref={ref} className="mb-20">
       {/* Section Header */}
       <div
-        className={`text-center mb-10 transition-all duration-700 ${
+        className={`text-center mb-8 transition-all duration-700 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         }`}
       >
@@ -95,10 +170,84 @@ export default function SuccessfulApplicantsSection() {
         )}
       </div>
 
+      {/* Filters */}
+      <div
+        className={`flex flex-col sm:flex-row gap-3 mb-6 transition-all duration-700 delay-100 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        }`}
+      >
+        {/* Search */}
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 pr-9 bg-white"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Country filter */}
+        {countries.length > 0 && (
+          <Select value={selectedCountry} onValueChange={(v) => { setSelectedCountry(v); setCurrentPage(1); }}>
+            <SelectTrigger className="w-full sm:w-44 bg-white">
+              <MapPin className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="Country" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Countries</SelectItem>
+              {countries.map((c) => (
+                <SelectItem key={c} value={c}>{c}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+
+        {/* Job Title filter */}
+        {jobTitles.length > 0 && (
+          <Select value={selectedJobTitle} onValueChange={(v) => { setSelectedJobTitle(v); setCurrentPage(1); }}>
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <Briefcase className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="Job Title" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Job Titles</SelectItem>
+              {jobTitles.map((j) => (
+                <SelectItem key={j} value={j}>{j}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+
+        {/* Clear filters */}
+        {hasActiveFilters && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground hover:text-primary self-center">
+            <X className="h-3.5 w-3.5 mr-1" />
+            Clear
+          </Button>
+        )}
+      </div>
+
       {/* Loading */}
       {isLoading ? (
         <div className="flex justify-center py-12">
           <Loader2 className="h-7 w-7 animate-spin text-primary" />
+        </div>
+      ) : applicants.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <Trophy className="h-10 w-10 mx-auto mb-3 opacity-20" />
+          <p className="font-medium">No applicants match your search</p>
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="mt-2">
+            Clear filters
+          </Button>
         </div>
       ) : (
         <>
@@ -110,9 +259,7 @@ export default function SuccessfulApplicantsSection() {
                 className={`group bg-white border border-primary/10 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
-                style={{
-                  transitionDelay: isVisible ? `${index * 60}ms` : "0ms",
-                }}
+                style={{ transitionDelay: isVisible ? `${index * 60}ms` : "0ms" }}
               >
                 <CardContent className="p-4 flex flex-col items-center text-center">
                   {/* Circular Photo */}
