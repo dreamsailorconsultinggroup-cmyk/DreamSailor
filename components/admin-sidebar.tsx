@@ -34,9 +34,8 @@ const sidebarItems: SidebarItem[] = [
     title: "Talents",
     icon: Briefcase,
     children: [
-      { title: "Applicant Portal", icon: Plus, href: "/admin/applicants/add" },
-      { title: "Applicant List", icon: Plus, href: "/admin/applicants" },
-      { title: "Applicant Edit", icon: Plus, href: "/admin/applicants/edit" },
+      { title: "Add Applicants", icon: Plus, href: "/admin/applicants/add" },
+      { title: "Applicant List", icon: Plus, href: "/admin/applicants" }
     ],
   },
   {
@@ -61,13 +60,6 @@ const sidebarItems: SidebarItem[] = [
     icon: FileText,
     children: [
       { title: "Inquiries", icon: List, href: "/admin/businessEventsView" },
-    ],
-  },
-  {
-    title: "Lands and Homes",
-    icon: Home,
-    children: [
-      { title: "Add Home", icon: Plus, href: "/admin/businessEventsView" },
     ],
   }
 ]

@@ -71,7 +71,7 @@ export default function AddSuccessfulApplicantPage() {
 
       if (data.success) {
         toast({ title: "Success", description: "Applicant added successfully" });
-        router.push("/admin/successful-applicants");
+        router.push("/admin/applicants");
       } else {
         toast({
           title: "Error",
