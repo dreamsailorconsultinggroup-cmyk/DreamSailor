@@ -31,6 +31,13 @@ const sidebarItems: SidebarItem[] = [
     children: [{ title: "Edu Applicants", icon: List, href: "/admin/education" }],
   },
   {
+    title: "Talents",
+    icon: Briefcase,
+    children: [
+      { title: "Applicant Portal", icon: Plus, href: "/admin/add-applicant" },
+    ],
+  },
+  {
     title: "Job & Recruitment",
     icon: Briefcase,
     children: [
