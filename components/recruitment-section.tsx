@@ -52,7 +52,7 @@ import {
   getJobTypeLabel,
 } from "@/lib/jobPostService";
 import { Input } from "@/components/ui/input";
-import ApplicantSection from "./ui/applicant-card-view";
+import SuccessfulApplicantsSection from "./successful-applicant-section";
 
 // ------------------- Types -------------------
 interface Blog {
@@ -386,15 +386,8 @@ export function RecruitmentSection() {
             </div>
           </div>
 
-          {/* Applicant Success Stories */}
-          {applicants.length > 0 && (
-            <ApplicantSection
-              blogs={applicants}
-              title="View our talents"
-              subtitle="Discover our best talents."
-              linkPrefix="recruitment/blogs"
-            />
-          )}
+          {/* Successful Applicants */}
+          <SuccessfulApplicantsSection />
 
           {/* Current Opportunities Section */}
           <div id="current-opportunities" className="mb-16">
@@ -996,40 +989,40 @@ export function RecruitmentSection() {
                           </h3>
                           <p
                             className={`text-sm text-muted-foreground mb-2 ${isVisible
-                                ? "animate-fade-in delay-100"
-                                : "opacity-0"
+                              ? "animate-fade-in delay-100"
+                              : "opacity-0"
                               }`}
                           >
                             {consultant.role}
                           </p>
                           <p
                             className={`text-sm text-pretty mb-2 ${isVisible
-                                ? "animate-fade-in delay-200"
-                                : "opacity-0"
+                              ? "animate-fade-in delay-200"
+                              : "opacity-0"
                               }`}
                           >
                             {consultant.description}
                           </p>
                           <p
                             className={`text-sm text-muted-foreground mb-2 ${isVisible
-                                ? "animate-fade-in delay-300"
-                                : "opacity-0"
+                              ? "animate-fade-in delay-300"
+                              : "opacity-0"
                               }`}
                           >
                             <strong>Email:</strong> {consultant.email}
                           </p>
                           <p
                             className={`text-sm text-muted-foreground mb-2 ${isVisible
-                                ? "animate-fade-in delay-400"
-                                : "opacity-0"
+                              ? "animate-fade-in delay-400"
+                              : "opacity-0"
                               }`}
                           >
                             <strong>Contact:</strong> {consultant.contactNumber}
                           </p>
                           <div
                             className={`flex flex-wrap gap-2 mt-2 justify-center ${isVisible
-                                ? "animate-fade-in delay-500"
-                                : "opacity-0"
+                              ? "animate-fade-in delay-500"
+                              : "opacity-0"
                               }`}
                           >
                             {consultant.certificates.map((cert) => (
