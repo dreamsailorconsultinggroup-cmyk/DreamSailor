@@ -162,7 +162,7 @@ export default function AdminSuccessfulApplicantsPage() {
                 </p>
               </div>
             </div>
-            <Link href="/admin/successful-applicants/add">
+            <Link href="/admin/add-applicant">
               <Button className="bg-primary hover:bg-primary/90 text-white">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Applicant
