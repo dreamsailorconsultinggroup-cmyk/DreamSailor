@@ -959,12 +959,11 @@ export function RecruitmentSection() {
                       organizations worldwide.
                     </p>
                   </div>
-
-                  <div className="flex justify-center gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {recruitmentConsultants.map((consultant, index) => (
                       <Card
                         key={consultant.name}
-                        className={`relative w-full max-w-sm bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"
+                        className={`relative bg-white border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"
                           }`}
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
@@ -974,7 +973,7 @@ export function RecruitmentSection() {
                               <img
                                 src={consultant.photo}
                                 alt={consultant.name}
-                                className={`absolute inset-0 w-full h-full object-contain bg-white ${isVisible ? "animate-scale-in" : "opacity-0"
+                                className={`w-full h-full object-contain bg-white ${isVisible ? "animate-scale-in" : "opacity-0"
                                   }`}
                               />
                             </div>
@@ -988,53 +987,29 @@ export function RecruitmentSection() {
                             {consultant.name}
                           </h3>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${isVisible
-                              ? "animate-fade-in delay-100"
-                              : "opacity-0"
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible ? "animate-fade-in delay-100" : "opacity-0"
                               }`}
                           >
                             {consultant.role}
                           </p>
                           <p
-                            className={`text-sm text-pretty mb-2 ${isVisible
-                              ? "animate-fade-in delay-200"
-                              : "opacity-0"
+                            className={`text-sm text-pretty mb-2 ${isVisible ? "animate-fade-in delay-200" : "opacity-0"
                               }`}
                           >
                             {consultant.description}
                           </p>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${isVisible
-                              ? "animate-fade-in delay-300"
-                              : "opacity-0"
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible ? "animate-fade-in delay-300" : "opacity-0"
                               }`}
                           >
                             <strong>Email:</strong> {consultant.email}
                           </p>
                           <p
-                            className={`text-sm text-muted-foreground mb-2 ${isVisible
-                              ? "animate-fade-in delay-400"
-                              : "opacity-0"
+                            className={`text-sm text-muted-foreground mb-2 ${isVisible ? "animate-fade-in delay-400" : "opacity-0"
                               }`}
                           >
                             <strong>Contact:</strong> {consultant.contactNumber}
                           </p>
-                          <div
-                            className={`flex flex-wrap gap-2 mt-2 justify-center ${isVisible
-                              ? "animate-fade-in delay-500"
-                              : "opacity-0"
-                              }`}
-                          >
-                            {consultant.certificates.map((cert) => (
-                              <Badge
-                                key={cert}
-                                variant="secondary"
-                                className="text-xs"
-                              >
-                                {cert}
-                              </Badge>
-                            ))}
-                          </div>
                         </CardContent>
                       </Card>
                     ))}
