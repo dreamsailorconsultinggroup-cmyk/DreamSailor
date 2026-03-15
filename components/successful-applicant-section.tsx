@@ -154,7 +154,7 @@ export default function SuccessfulApplicantsSection() {
           <div className="flex items-center justify-center gap-3 mb-3">
             <Trophy className="h-7 w-7 text-accent" />
             <h2 className="text-3xl sm:text-4xl font-bold text-primary">
-              Our Successful Talents
+              Our talents ( onshore / offshore )
             </h2>
           </div>
           <p className="text-base text-muted-foreground max-w-2xl mx-auto">
