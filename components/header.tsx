@@ -45,7 +45,7 @@ export function Header({ className }: HeaderProps) {
   ]
 
   const otherServices = [
-    { name: "Land & Homes", href: "/land-homes" },
+    { name: "Real Estate", href: "/land-homes" },
     { name: "Business & Events", href: "/business-events" }
   ]
 
